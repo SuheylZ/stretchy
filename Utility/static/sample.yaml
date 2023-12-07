@@ -1,21 +1,21 @@
-# booking:
-#   indices:
-#   - name: 'hotel'
-#     fields:
-#       - name: personName 
-#         type: text
-#       - name: nic 
-#         type: text
-#         size: 10
-#       - name: roomNumber 
-#         type: number
-#         size: 10
-#   - name: 'product'
-#     fields:
-#       - name: title 
-#         type: string
-#       - name: from 
-#         type: date
+booking:
+  indices:
+  - name: 'hotel'
+    fields:
+      - name: personName 
+        type: text
+      - name: nic 
+        type: text
+        size: 10
+      - name: roomNumber 
+        type: number
+        size: 10
+  - name: 'product'
+    fields:
+      - name: title 
+        type: string
+      - name: from 
+        type: date
 
 trips:
   indices:
