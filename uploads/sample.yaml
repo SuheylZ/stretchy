@@ -1,0 +1,27 @@
+booking:
+  indices:
+  - name: 'hotel'
+    fields:
+      - name: personName 
+        type: text
+      - name: nic 
+        type: text
+        size: 10
+      - name: roomNumber 
+        type: number
+        size: 10
+  - name: 'product'
+    fields:
+      - name: title 
+        type: string
+      - name: from 
+        type: date
+
+trips:
+  indices:
+    - name: khi_to_lhr
+      fields:
+        - name: totalPassengers
+          type: number
+        - name: departureAt
+          type: datetime
