@@ -16,16 +16,21 @@ router.post('/api/upload',upload.single('file'),yamlFilterMiddleware,async (req,
   
  // Access the uploaded file details using req.file
  const uploadedFile = req.file;
-  if(!req.body.indices || req.body.indices ==='')
-    throw new Error('please provide indices');
+  if(!req.body.indices || req.body.indices ===''){
 
+    res.status(400).send('Please provide indices');
+  }else{
+
+ 
+
+    const id=uuid.v4();
     const indicesArray = req.body.indices.split(',');
   // __readYAMLFile__(uploadedFile?.originalname!, ['booking', 'trips'])
-  __readYAMLFile__(uploadedFile?.originalname!, indicesArray)
+  await __readYAMLFile__(uploadedFile?.originalname!,id, indicesArray)
  // Handle the file as needed
  const inputFolderPath = path.join(__dirname,'../static');
  const outputPath = path.join(__dirname,'../static/');
- const id=uuid.v4();
+
  const outputZipPath = outputPath+`${id}.zip`;
  
  // Create a writable stream to the compressed archive
@@ -40,8 +45,11 @@ router.post('/api/upload',upload.single('file'),yamlFilterMiddleware,async (req,
  // Append all files in the input folder to the archive
  const files = fs.readdirSync(inputFolderPath);
  files.forEach((fileName) => {
-   const filePath = path.join(inputFolderPath, fileName);
-   archive.file(filePath, { name: fileName });
+    if(fileName.includes(id) && !fileName.includes('.zip')){
+
+      const filePath = path.join(inputFolderPath, fileName);
+      archive.file(filePath, { name: fileName });
+    }
  });
  
  // Finalize the archive
@@ -55,7 +63,7 @@ router.post('/api/upload',upload.single('file'),yamlFilterMiddleware,async (req,
  outputZipStream.on('error', (err) => {
    console.error('Error creating compressed archive:', err);
  });
-
+}
 } catch (error) {
     throw error
 }
@@ -66,8 +74,10 @@ router.get('/api/:id/download', async (req: Request, res: Response) => {
 
   try {
     
-  if(!req.params.id)
-    throw new Error('please provide id');
+  if(!req.params.id){
+    res.status(400).send('Please provide id');
+  }
+  else{
 
   const filePath = path.join(__dirname,'../static', `${req.params.id}.zip`);
  // Set the response headers to indicate a file download
@@ -77,8 +87,9 @@ router.get('/api/:id/download', async (req: Request, res: Response) => {
 
  // Stream the file to the response
   res.sendFile(filePath);
+}
 } catch (error) {
-    throw error
+    res.status(500).send('Internal Server Error');
 }
 });
 

@@ -107,14 +107,14 @@ const typescriptContent = () => {
     return content
 }
 
-export const generateFileContent = (idxName: string, types: string[], lang: Lang)=>{
+export const generateFileContent = (id:string,idxName: string, types: string[], lang: Lang)=>{
     let content: string = ''
     let filename: string = 'testFile'
     let fileExt: string = ''
     switch (lang) {
         case Lang.TypeScript:
             fileExt = 'ts'
-            filename = `ES-${idxName}`
+            filename = `${id}_ES-${idxName}`
             let q: string = '{';
             let arr: string[] = []
             for(const t of types){
@@ -154,7 +154,7 @@ export type field = {
   name: string
   type: string
 }
-export const __readYAMLFile__ = (filename: string, docNames: string[]) => {
+export const __readYAMLFile__ = (filename: string,id: string, docNames: string[]) => {
   try {
     console.log('reading file: ', filename)
     const file = readFile(filename)
@@ -169,7 +169,7 @@ export const __readYAMLFile__ = (filename: string, docNames: string[]) => {
       }
       const indices: index[] = doc.indices 
       for(const idx of indices){
-        generateFileContent(`${docName}.${idx.name}`, idx.fields.map(x => x.name), Lang.TypeScript)
+        generateFileContent(id,`${docName}.${idx.name}`, idx.fields.map(x => x.name), Lang.TypeScript)
       }
     }
     console.log(`completed.`)
